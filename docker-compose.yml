@@ -1,0 +1,43 @@
+version: "3.9"
+
+networks:
+  ai_dashboard_network:
+    driver: bridge
+
+services:
+  fastapi:
+    build: .
+    container_name: fastapi_app
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      MONGO_URI: "mongodb://mongo:27017/ai_data"
+      REDIS_HOST: "redis"
+    networks:
+      - ai_dashboard_network
+
+  mongo:
+    image: mongo:5
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data_ai_dashboard:/data/db
+    networks:
+      - ai_dashboard_network
+
+  redis:
+    image: redis:6
+    container_name: redis_cache_ml
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - ai_dashboard_network
+
+volumes:
+  mongo_data_ai_dashboard:
