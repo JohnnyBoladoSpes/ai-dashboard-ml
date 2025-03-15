@@ -1,16 +1,24 @@
-from typing import Dict
+from fastapi_app.dataclasses.analysis_result import (
+    AnalysisResultData,
+)
 
 from fastapi import APIRouter, HTTPException
+from fastapi_app.use_cases import AnalyzeTextUseCase
+from fastapi_app.serializers import AnalysisRequestSerializer
 
 router = APIRouter()
 
 
-@router.post("/analyze")
-def analyze_text(data: Dict[str, str]) -> Dict[str, str]:
-    """Analyzes the input text and returns a simulated sentiment."""
-    if "text" not in data:
-        raise HTTPException(status_code=400, detail="Missing 'text' field")
+class AnalysisView:
+    """API View for handling text analysis requests."""
 
-    # Simulated AI analysis
-    result = {"text": data["text"], "sentiment": "positive"}
-    return result
+    @staticmethod
+    @router.post("/analyze", response_model=AnalysisResultData)
+    def analyze_text(request: AnalysisRequestSerializer):
+        """Receives a text, processes it using the use case, and returns the result."""
+        try:
+            use_case = AnalyzeTextUseCase()
+            result = use_case.execute(request)
+            return result
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))

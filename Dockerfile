@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 9000
 
-CMD ["uvicorn", "fastapi_app.main:app", "--host", "0.0.0.0", "--port", "9000", "--reload"]
+CMD ["uvicorn", "fastapi_app.main:app", "--host", "0.0.0.0", "--port", "9000", "--reload", "--reload-dir", "/app"]

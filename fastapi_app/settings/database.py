@@ -1,10 +1,11 @@
 from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 
 from fastapi_app.settings.config import MONGO_URI
 
 
 class DatabaseConnection:
-    """Handles MongoDB connection as a Singleton class."""
+    """Handles MongoDB connection as a Singleton class with authentication."""
 
     _instance = None
 
@@ -15,11 +16,17 @@ class DatabaseConnection:
         return cls._instance
 
     def _init_db(self, uri: str = MONGO_URI, db_name: str = "ai_data") -> None:
-        """Initialize the MongoDB connection."""
-        self.client = MongoClient(uri)
-        self.db = self.client[db_name]
+        """Initialize the MongoDB connection with authentication."""
+        try:
+            self.client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+            self.db = self.client[db_name]
+            # Test connection
+            self.client.server_info()
+            print("MongoDB connection successful")
+        except ServerSelectionTimeoutError:
+            print("Error: Unable to connect to MongoDB.")
 
-    def get_collection(self, collection_name: str) -> MongoClient:
+    def get_collection(self, collection_name: str):
         """Retrieve a collection from the database."""
         return self.db[collection_name]
 
@@ -28,4 +35,4 @@ class DatabaseConnection:
 mongo_connection = DatabaseConnection()
 
 if __name__ == "__main__":
-    print("MongoDB connection successful:", mongo_connection.db.list_collection_names())
+    print("Available collections:", mongo_connection.db.list_collection_names())
