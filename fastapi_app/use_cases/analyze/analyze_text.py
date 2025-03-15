@@ -1,34 +1,32 @@
-import random
-from fastapi_app.dataclasses.analysis_result import (
-    AnalysisResultData,
-    CreateAnalysisResultRequestData,
-)
+from typing import List
 
+from fastapi_app.dataclasses.analysis_result import (
+    CreateAnalysisRequestData,
+)
+from fastapi_app.dataclasses.models_ia import (
+    IndividualCommentAnalysis,
+    SentimentalAnalysisData,
+)
+from fastapi_app.models import SentimentAnalysisModel
 from fastapi_app.services import AnalysisResultService
 
 
 class AnalyzeTextUseCase:
     def __init__(self):
         self.service = AnalysisResultService()
+        self.sentiment_model = SentimentAnalysisModel()
 
-    def _analyze_sentiment(self) -> str:
-        return random.choice(["positive", "neutral", "negative"])
+    def execute(
+        self, comments: List[CreateAnalysisRequestData]
+    ) -> SentimentalAnalysisData:
+        analysis_result = self.sentiment_model.analyze_batch(comments)
 
-    def _get_confidence(self) -> float:
-        return round(random.uniform(0.75, 0.99), 2)
+        for comment in analysis_result.comments:
+            individual_analysis = IndividualCommentAnalysis(
+                comment_id=comment.comment_id,
+                sentiment=comment.sentiment,
+                confidence=comment.confidence,
+            )
+            self.service.create(individual_analysis)
 
-    def execute(self, request: CreateAnalysisResultRequestData) -> AnalysisResultData:
-        sentiment = self._analyze_sentiment()
-        confidence = self._get_confidence()
-        keywords = ["example", "keyword"]
-        topics = ["example topic"]
-
-        analysis_request = CreateAnalysisResultRequestData(
-            request_id=request.request_id,
-            sentiment=sentiment,
-            confidence=confidence,
-            keywords=keywords,
-            topics=topics,
-        )
-
-        return self.service.create(analysis_request)
+        return analysis_result

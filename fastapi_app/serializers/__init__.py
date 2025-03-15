@@ -1,1 +1,1 @@
-from .analysis import AnalysisRequestSerializer
+from .analysis import AnalysisRequestSerializer, SentimentAnalysisResponseSerializer

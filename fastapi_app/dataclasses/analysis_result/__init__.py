@@ -1,1 +1,5 @@
-from .analysis_result import AnalysisResultData, CreateAnalysisResultRequestData
+from .analysis_result import (
+    AnalysisResultData,
+    CreateAnalysisResultRequestData,
+    CreateAnalysisRequestData,
+)

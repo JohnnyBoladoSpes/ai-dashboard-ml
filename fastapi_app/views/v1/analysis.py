@@ -1,10 +1,12 @@
-from fastapi_app.dataclasses.analysis_result import (
-    AnalysisResultData,
-)
+from typing import List
 
 from fastapi import APIRouter, HTTPException
+
+from fastapi_app.dataclasses.models_ia import SentimentalAnalysisData
+from fastapi_app.serializers import (
+    AnalysisRequestSerializer,
+)
 from fastapi_app.use_cases import AnalyzeTextUseCase
-from fastapi_app.serializers import AnalysisRequestSerializer
 
 router = APIRouter()
 
@@ -12,10 +14,8 @@ router = APIRouter()
 class AnalysisView:
     """API View for handling text analysis requests."""
 
-    @staticmethod
-    @router.post("/analyze", response_model=AnalysisResultData)
-    def analyze_text(request: AnalysisRequestSerializer):
-        """Receives a text, processes it using the use case, and returns the result."""
+    @router.post("/analyze", response_model=SentimentalAnalysisData)
+    def analyze_text(request: List[AnalysisRequestSerializer]):
         try:
             use_case = AnalyzeTextUseCase()
             result = use_case.execute(request)

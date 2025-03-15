@@ -23,8 +23,8 @@ class DatabaseConnection:
             # Test connection
             self.client.server_info()
             print("MongoDB connection successful")
-        except ServerSelectionTimeoutError:
-            print("Error: Unable to connect to MongoDB.")
+        except ServerSelectionTimeoutError as error:
+            print(f"Error: Unable to connect to MongoDB. {error}")
 
     def get_collection(self, collection_name: str):
         """Retrieve a collection from the database."""
