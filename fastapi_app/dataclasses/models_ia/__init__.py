@@ -3,4 +3,5 @@ from .sentiment_analysis import (
     IndividualCommentAnalysis,
     SentimentAnalysisSummary,
     CreateSentimentSummaryData,
+    CreateSentimentAnalysisSummaryData,
 )

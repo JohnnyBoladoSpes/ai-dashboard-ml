@@ -7,4 +7,5 @@ from .models_ia import (
     SentimentalAnalysisData,
     IndividualCommentAnalysis,
     SentimentAnalysisSummary,
+    CreateSentimentAnalysisSummaryData,
 )

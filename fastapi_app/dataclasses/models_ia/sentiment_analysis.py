@@ -21,7 +21,7 @@ class IndividualCommentAnalysis:
 
 
 @dataclass
-class SentimentAnalysisSummary:
+class CreateSentimentAnalysisSummaryData:
     """Represents a summary of sentiment analysis over multiple comments."""
 
     total_comments: int
@@ -30,7 +30,14 @@ class SentimentAnalysisSummary:
     negative_ratio: float
     common_keywords: List[str]
     dominant_sentiment: str
-    _id: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class SentimentAnalysisSummary(CreateSentimentAnalysisSummaryData):
+    _id: str
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -55,6 +62,7 @@ class CreateSentimentSummaryData:
     negative_ratio: float
     common_keywords: List[str]
     dominant_sentiment: str
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

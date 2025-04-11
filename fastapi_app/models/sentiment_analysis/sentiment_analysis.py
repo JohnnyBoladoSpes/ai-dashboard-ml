@@ -7,7 +7,7 @@ from fastapi_app.dataclasses.analysis_result import CreateAnalysisRequestData
 from fastapi_app.dataclasses.models_ia import (
     IndividualCommentAnalysis,
     SentimentalAnalysisData,
-    SentimentAnalysisSummary,
+    CreateSentimentAnalysisSummaryData,
 )
 
 from .constants import NEGATIVE, NEUTRAL, POSITIVE, SENTIMENT_ANALYSIS
@@ -69,7 +69,7 @@ class SentimentAnalysisModel:
         )
 
         # Create summary
-        summary = SentimentAnalysisSummary(
+        summary = CreateSentimentAnalysisSummaryData(
             positive_ratio=positive_ratio,
             neutral_ratio=neutral_ratio,
             negative_ratio=negative_ratio,
