@@ -56,3 +56,50 @@ class EngagementMetricModel(BaseModel):
     saves: int = Field(default=0)
     clicks: int = Field(default=0)
     collected_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class AnalysisSummaryModel(BaseModel):
+    """Model to store the summary of a sentiment analysis batch."""
+
+    summary_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    total_comments: int = Field(..., description="Number of comments analyzed")
+    positive_ratio: float = Field(..., description="Proportion of positive comments")
+    neutral_ratio: float = Field(..., description="Proportion of neutral comments")
+    negative_ratio: float = Field(..., description="Proportion of negative comments")
+    dominant_sentiment: str = Field(..., description="Most common sentiment")
+    common_keywords: List[str] = Field(
+        default_factory=list, description="Most frequent keywords in the batch"
+    )
+    comment_ids: List[str] = Field(
+        default_factory=list, description="List of comment IDs included in the analysis"
+    )
+    processed_texts: List[str] = Field(
+        default_factory=list, description="List of texts that were processed"
+    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+from pymongo import MongoClient
+from fastapi_app.settings.models import AnalysisSummaryModel
+
+
+class SummaryStorageProvider:
+    """Handles storage of sentiment analysis summaries in MongoDB."""
+
+    def __init__(
+        self,
+        mongo_uri: str = "mongodb://localhost:27017",
+        db_name: str = "ai_dashboard",
+    ):
+        self.client = MongoClient(mongo_uri)
+        self.db = self.client[db_name]
+        self.collection = self.db["analysis_summaries"]
+
+    def save_summary(self, summary: AnalysisSummaryModel) -> str:
+        """Insert a summary into the MongoDB collection."""
+        result = self.collection.insert_one(summary.dict())
+        return str(result.inserted_id)
+
+    def get_summary_by_id(self, summary_id: str) -> dict:
+        """Retrieve a summary by its ID."""
+        return self.collection.find_one({"summary_id": summary_id})

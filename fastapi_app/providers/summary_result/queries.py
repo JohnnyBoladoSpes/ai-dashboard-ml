@@ -1,0 +1,1 @@
+SUMMARY_RESULT_COLLECTION = "summary_result"

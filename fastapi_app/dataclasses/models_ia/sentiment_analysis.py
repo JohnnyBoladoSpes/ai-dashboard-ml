@@ -42,3 +42,16 @@ class SentimentalAnalysisData:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+
+@dataclass
+class CreateSentimentSummaryData:
+    comment_ids: List[str]
+    positive_ratio: float
+    neutral_ratio: float
+    negative_ratio: float
+    common_keywords: List[str]
+    dominant_sentiment: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
