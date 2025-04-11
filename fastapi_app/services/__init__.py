@@ -1,1 +1,2 @@
 from .analysis_result import AnalysisResultService
+from .summary_result import SummaryResultService

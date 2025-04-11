@@ -20,7 +20,8 @@ class SentimentAnalyzerBuilder:
                 comment_id=comment.comment_id,
                 user_id=comment.user_id,
                 text=self.preprocessor.clean_text(comment.text),
-                company_id=comment.company_id,
+                business_id=comment.business_id,
+                media_id=comment.media_id,
                 source=comment.source,
                 requested_at=comment.requested_at,
             )

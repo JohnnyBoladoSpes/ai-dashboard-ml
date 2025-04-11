@@ -9,6 +9,8 @@ class IndividualCommentAnalysis:
 
     comment_id: str
     sentiment: str
+    media_id: str
+    business_id: str
     confidence: Optional[float] = None
     keywords: List[str] = field(default_factory=list)
     topics: List[str] = field(default_factory=list)
@@ -28,6 +30,7 @@ class SentimentAnalysisSummary:
     negative_ratio: float
     common_keywords: List[str]
     dominant_sentiment: str
+    _id: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

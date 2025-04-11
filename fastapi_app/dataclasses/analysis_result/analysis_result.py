@@ -9,6 +9,8 @@ class AnalysisResultData:
 
     comment_id: str
     sentiment: str
+    business_id: str
+    media_id: str
     _id: Optional[str] = None
     confidence: Optional[float] = None
     keywords: List[str] = field(default_factory=list)
@@ -38,6 +40,7 @@ class CreateAnalysisRequestData:
     comment_id: str
     user_id: str
     text: str
-    company_id: Optional[str] = None
+    business_id: Optional[str] = None
+    media_id: Optional[str] = None
     source: Optional[str] = None
     requested_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))

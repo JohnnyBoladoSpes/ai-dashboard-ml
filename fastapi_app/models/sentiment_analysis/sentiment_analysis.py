@@ -39,7 +39,10 @@ class SentimentAnalysisModel:
         # Analyze each comment in the batch
         comment_results = [
             IndividualCommentAnalysis(
-                comment_id=comment.comment_id, **self.analyze(comment.text)
+                comment_id=comment.comment_id,
+                media_id=comment.media_id,
+                business_id=comment.business_id,
+                **self.analyze(comment.text)
             )
             for comment in comments
         ]

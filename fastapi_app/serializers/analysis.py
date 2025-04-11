@@ -18,6 +18,10 @@ class AnalysisRequestSerializer(BaseModel):
     )
     text: str = Field(...)
     requested_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    media_id: str = Field(
+        description="Media ID of the post (used to avoid re-analysis)"
+    )
+    business_id: str = Field(description="Business ID associated with the request")
 
     class Config:
         orm_mode = True
